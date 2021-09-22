@@ -43,16 +43,17 @@ module.exports.loginUser = async (req, res, next) => {
   const match = await check.comparePassword(req.body.password);
   if (!match) {
     next(ApiError.Unauthorized("password is not correct"));
+    return;
   }
   const jwt = createJwt(check.email, check.phone, check._id);
   check.password = "";
-  res.cookie("token", jwt);
+  res.cookie("token", jwt, { httpOnly: false, secure: true, sameSite: "none" });
   res.status(200).json({ data: check, token: jwt });
 };
 
 // check auth
 module.exports.checkAuth = async (req, res, next) => {
-  res.json({ data: req.userSession });
+  res.json({ data: req.userSession, auth: true });
 };
 
 // update user
@@ -88,4 +89,8 @@ module.exports.getUserById = async (req, res, next) => {
     next(ApiError.notFound("employee not found"));
   }
   res.json({ data: getSingleEmployee });
+};
+module.exports.logout = async (req, res, next) => {
+  res.cookie("token", "", { httpOnly: false, secure: true, sameSite: "none" });
+  res.json({ data: "logout" });
 };

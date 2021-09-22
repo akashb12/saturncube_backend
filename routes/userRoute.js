@@ -7,6 +7,7 @@ const {
   getUsers,
   getUserById,
   uploadImage,
+  logout,
 } = require("../controller/userController");
 const { catchError } = require("../errors/catchAsync");
 const { auth } = require("../middleware/auth");
@@ -15,6 +16,7 @@ router.get("/getUsers", catchError(getUsers));
 router.get("/getUserById/:id", catchError(getUserById));
 router.post("/upload", catchError(uploadImage));
 router.post("/register", catchError(registerUser));
+router.post("/logout", catchError(logout));
 router.post("/login", catchError(loginUser));
 router.get("/auth", auth, catchError(checkAuth));
 router.put("/update/:id", auth, catchError(updateUser));
