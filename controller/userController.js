@@ -90,6 +90,8 @@ module.exports.getUserById = async (req, res, next) => {
   }
   res.json({ data: getSingleEmployee });
 };
+
+// logout
 module.exports.logout = async (req, res, next) => {
   res.cookie("token", "", { httpOnly: false, secure: true, sameSite: "none" });
   res.json({ data: "logout" });
